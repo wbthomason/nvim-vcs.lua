@@ -124,7 +124,10 @@ local process_diff = vim.schedule_wrap(function(exit_success, path, ctx, output_
       elseif line_stats.mod_count > 0 and line_stats.new_count == 0 then
         stats.removed = stats.removed + line_stats.mod_count
       else
-        stats.modified = stats.modified + line_stats.mod_count
+        local min = math.min(line_stats.mod_count, line_stats.new_count)
+        modified = modified + min
+        added  = added + line_stats.new_count - min
+        removed = removed + line_stats.mod_count - min
       end
     end
   end
